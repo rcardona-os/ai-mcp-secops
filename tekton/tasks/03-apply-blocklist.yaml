@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: apply-blocklist
+  namespace: secops-ai
+spec:
+  params:
+    - name: CIDR
+      type: string
+      default: 203.0.113.77/32
+  steps:
+    - name: block
+      image: quay.io/openshift/origin-cli:4.15
+      script: |
+        cat <<EOF | oc apply -f -
+apiVersion: network.openshift.io/v1
+kind: EgressFirewall
+metadata:
+  name: block-$(params.CIDR)
+  namespace: secops-ai
+spec:
+  egress:
+  - type: Deny
+    to:
+      cidrSelector: $(params.CIDR)
+EOF

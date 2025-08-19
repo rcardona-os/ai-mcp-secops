@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: secops-pipeline
+  namespace: secops-ai
+spec:
+  params:
+    - name: CIDR
+      type: string
+      default: 203.0.113.77/32
+  tasks:
+    - name: ship
+      taskRef: { name: ship-eve-to-loki }
+    - name: enrich
+      runAfter: ["ship"]
+      taskRef: { name: enrich-alerts }
+    - name: block
+      runAfter: ["enrich"]
+      taskRef: { name: apply-blocklist }
+      params:
+        - name: CIDR
+          value: $(params.CIDR)

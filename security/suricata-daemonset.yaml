@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: suricata
+  namespace: secops-ai
+spec:
+  selector:
+    matchLabels:
+      app: suricata
+  template:
+    metadata:
+      labels:
+        app: suricata
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+        - name: suricata
+          image: jasonish/suricata:latest
+          securityContext:
+            privileged: true
+          args: ["-i","any","-D","-l","/var/log/suricata"]
+          volumeMounts:
+            - name: host-var-log
+              mountPath: /var/log
+      volumes:
+        - name: host-var-log
+          hostPath:
+            path: /var/log

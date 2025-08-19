@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: enrich-alerts
+  namespace: secops-ai
+spec:
+  steps:
+    - name: enrich
+      image: python:3.11-slim
+      script: |
+        python - <<'PY'
+print("Enrich Suricata alerts with threat intel (STIX/TAXII/abuse.ch)")
+PY

@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: ship-eve-to-loki
+  namespace: secops-ai
+spec:
+  params:
+    - name: EVE_PATH
+      type: string
+      default: /var/log/suricata/eve.json
+  steps:
+    - name: ship
+      image: curlimages/curl:8.8.0
+      script: |
+        echo "Ship $(params.EVE_PATH) to your Loki/Elastic endpoint here."

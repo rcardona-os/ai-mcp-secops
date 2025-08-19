@@ -1,0 +1,22 @@
+apiVersion: org.opendatahub/v1alpha
+kind: DataScienceProject
+metadata:
+  name: secops-project
+  namespace: secops-ai
+spec:
+  description: "SecOps project with MCP + NIDS/NIPS"
+---
+apiVersion: org.opendatahub/v1alpha
+kind: Workbench
+metadata:
+  name: analyst-notebook
+  namespace: secops-ai
+spec:
+  displayName: Analyst Notebook
+  route:
+    enabled: true
+  notebook:
+    image: 'quay.io/opendatahub/workbench-images:jupyter-minimal'
+    resources:
+      requests: { cpu: "500m", memory: "1Gi" }
+      limits: { memory: "2Gi" }

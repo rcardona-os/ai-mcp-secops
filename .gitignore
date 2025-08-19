@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.db
+*.sqlite
+*.tar*
+*.zip
+.env
+.env.*
+.ipynb_checkpoints/
+dist/
+build/

@@ -1,0 +1,10 @@
+apiVersion: network.openshift.io/v1
+kind: EgressFirewall
+metadata:
+  name: block-example
+  namespace: secops-ai
+spec:
+  egress:
+  - type: Deny
+    to:
+      cidrSelector: 203.0.113.44/32

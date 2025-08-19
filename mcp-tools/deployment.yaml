@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-tools
+  namespace: secops-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: mcp-tools }
+  template:
+    metadata:
+      labels: { app: mcp-tools }
+    spec:
+      serviceAccountName: mcp-tools
+      containers:
+        - name: mcp-tools
+          image: quay.io/youruser/mcp-tools:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"

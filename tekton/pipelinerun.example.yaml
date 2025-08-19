@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: secops-pipeline-run
+  namespace: secops-ai
+spec:
+  pipelineRef: { name: secops-pipeline }
+  params:
+    - name: CIDR
+      value: 203.0.113.88/32
