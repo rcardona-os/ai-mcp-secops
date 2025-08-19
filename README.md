@@ -1,35 +1,44 @@
-# OpenShift AI + MCP Security Ops
+# OpenShift AI + MCP + NIDS/NIPS (No Model Optimisation)
 
-This repository demonstrates how to combine **OpenShift AI**, **Model Context Protocol (MCP)**, and traditional security controls (**NIDS/NIPS**) to build a secure, AI-augmented intrusion detection and prevention environment.
+This repository shows how to build a practical **SecOps control plane** on OpenShift using:
 
-The project shows how **AI workloads** can be deployed on OpenShift AI while being monitored and protected by **network intrusion detection/prevention systems**.  
-MCP serves as the extensibility layer, enabling dynamic policy enforcement, event-driven workflows, and security automation.
+- **OpenShift AI (RHOAI)** – analyst workbench / notebooks.
+- **MCP (Model Context Protocol)** – a lightweight, auditable tool API for operational actions.
+- **NIDS** – Suricata DaemonSet generating EVE JSON alerts.
+- **NIPS** – deterministic network controls (EgressFirewall + NetworkPolicy quarantine).
+
+No model compilation or optimisation here—just actionable detection and prevention you can ship today.
 
 ---
 
-## 🔥 High-Level Architecture
+## 🔭 High-Level Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Ext["External Traffic"]
-        U[User / Client]
+    subgraph EXT[External Traffic]
+      U[User / Client]
     end
 
-    subgraph Sec["Security Edge"]
-        NIDS[Suricata NIDS]:::nids
-        NIPS[EgressFirewall (NIPS)]:::nips
+    subgraph SEC[Security Edge]
+      NIDS[Suricata NIDS]
+      NIPS[EgressFirewall (NIPS)]
     end
 
-    subgraph OCP["OpenShift AI Cluster"]
-        G[GPU Workloads / AI Pipelines]:::ai
-        MCP[Model Context Protocol Server]:::mcp
+    subgraph OCP[OpenShift AI Cluster]
+      G[AI Workloads / RHODS Workbench]
+      MCP[MCP Tool Server]
     end
 
     U --> NIDS --> NIPS --> G
     G --> MCP
-    MCP -->|"Alerts, Context, Extra Policies"| NIDS
+    MCP -->|"Query alerts / push policies"| NIDS
 
-    classDef nids fill=#fef3c7,stroke=#f59e0b,stroke-width=2px;
-    classDef nips fill=#fee2e2,stroke=#ef4444,stroke-width=2px;
-    classDef ai fill=#dbeafe,stroke=#2563eb,stroke-width=2px;
-    classDef mcp fill=#e0f2fe,stroke=#0284c7,stroke-width=2px;
+    classDef nids fill:#fef3c7,stroke:#f59e0b,stroke-width:2px;
+    classDef nips fill:#fee2e2,stroke:#ef4444,stroke-width:2px;
+    classDef ai fill:#dbeafe,stroke:#2563eb,stroke-width:2px;
+    classDef mcp fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
+
+    class NIDS nids;
+    class NIPS nips;
+    class G ai;
+    class MCP mcp;
