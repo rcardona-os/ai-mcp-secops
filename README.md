@@ -1,26 +1,14 @@
-# 🚀 AI + OpenShift SecOps: NIDS, NIPS & MCP Integration
+# 🚀 OpenShift AI + MCP SecOps Lab with NIDS & NIPS (No Model Optimisation)
 
-[![OpenShift AI](https://img.shields.io/badge/OpenShift%20AI-v2.x-red)](https://www.redhat.com/en/technologies/cloud-computing/openshift/ai)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Security](https://img.shields.io/badge/security-enhanced-blue)]()
+This lab shows how to combine **OpenShift AI (RHODS)**, a lightweight **MCP tool server**, and network security controls (**Suricata NIDS** + **EgressFirewall NIPS**) to create a practical, auditable SecOps control plane on OpenShift.
 
----
-
-## 📖 Overview
-
-This repository demonstrates an **end-to-end SecOps pipeline** combining:
-
-- **Suricata NIDS** (Network Intrusion Detection System)  
-- **Egress Firewall NIPS** (Network Intrusion Prevention System)  
-- **OpenShift AI Workloads (RHODS Workbench)** for training/analysis  
-- **MCP (Model Control Plane / Tool Server)** for policy automation  
-
-> 🛡️ The goal is to **detect suspicious traffic, prevent malicious egress, analyze activity using AI**, and automatically **push new policies back** to the NIDS/NIPS edge.
+- **NIDS (Suricata)** detects suspicious traffic and writes EVE JSON logs.
+- **NIPS (EgressFirewall / NetworkPolicy)** blocks/contains malicious egress.
+- **MCP** provides deterministic, RBAC-scoped tools (block/unblock IPs, quarantine/release namespaces) that you can call from notebooks, scripts, or automation—*no model retraining required*.
 
 ---
 
-## 🏗️ High-Level Architecture
+## 🏗️ Architecture
 
 ```mermaid
 flowchart LR
@@ -30,7 +18,7 @@ flowchart LR
 
   subgraph SEC[Security Edge]
     NIDS[Suricata NIDS]
-    NIPS[EgressFirewall - NIPS]
+    NIPS[EgressFirewall / NIPS]
   end
 
   subgraph OCP[OpenShift AI Cluster]
@@ -42,7 +30,7 @@ flowchart LR
   G --> MCP
   MCP -->|"Query alerts / push policies"| NIDS
 
-  classDef nids fill:#eff3c7,stroke:#f59e0b,stroke-width:2px;
+  classDef nids fill:#fef3c7,stroke:#f59e0b,stroke-width:2px;
   classDef nips fill:#fee2e2,stroke:#ef4444,stroke-width:2px;
   classDef ai fill:#dbeafe,stroke:#2563eb,stroke-width:2px;
   classDef mcp fill:#e0f2fe,stroke:#0284c7,stroke-width:2px;
